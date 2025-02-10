@@ -77,10 +77,20 @@ Como se podrá comprobar al observar las clases, el Port [CustomersRepository](s
 no encaja con la interfaz [CustomersJPARepository](src/main/java/com/breadhardit/travelagencykata/infrastructure/persistence/repository/CustomersJPARepository.java) 
 así que para que encaje, tendremos que aplicar un patrón de diseño... pero, cúal?
 
-- Proporciona el código necesario para poder realizar el cambio.
-
-BONUS POINT: Aprovechando que estamos tocando el código, vamos a comprobar si hay algún punto que viole alguno
+Aprovechando que estamos tocando el código, vamos a comprobar si hay algún punto que viole alguno
 de los principios SOLID. Y si es así, lo vamos a corregir.
+
+Y ya por último, observa bien el código, en él se pueden ver algunos de los principios SOLID y patrones que 
+hemos estudiado. Crea un archivo RESPONSE.md en la raíz del proyecto e indica:
+
+- Qué principios SOLID se han utilizado para codificar este proyecto e indica algún ejemplo
+- Qué patrones de diseño has observado e indica algún ejemplo
+
+En resumen:
+
+- Codifica el cambio solicitado
+- Crea el fichero RESPONSE.md indicando principios SOLID y patrones que has observado en este proyecto
+- Analiza el código del proyecto y refactoriza las clases que no cumplan SOLID
 
 
 ## Requisitos de la tarea

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -55,4 +56,22 @@ public class CustomersController {
                 .passportNumber(customer.get().getPassportNumber())
                 .build());
     }
+    @GetMapping("/customers")
+    public ResponseEntity getCustomers(@RequestParam(name = "passport-number") String passportNumber) {
+        log.info("Getting the customer with the passport {}",passportNumber);
+        Optional<Customer> customer = GetCustomerQuery.builder()
+                .customersRepository(customersRepository)
+                .passport(passportNumber)
+                .build().handle();
+        return customer.isEmpty() ? ResponseEntity.noContent().build() :
+                ResponseEntity.ok(
+                  List.of(GetCustomerDTO.builder()
+                          .name(customer.get().getName())
+                          .surnames(customer.get().getSurnames())
+                          .birthDate(customer.get().getBirthDate())
+                          .passportNumber(customer.get().getPassportNumber())
+                          .build())
+                );
+    }
+
 }
