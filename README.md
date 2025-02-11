@@ -29,7 +29,7 @@ Have you tried to use Linux?
 
 See file [KATA_INSTRUCTIONS.md](KATA_INSTRUCTIONS.md)
 
-
+...
   
 
 
