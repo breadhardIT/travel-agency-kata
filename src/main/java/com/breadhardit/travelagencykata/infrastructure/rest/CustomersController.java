@@ -4,10 +4,12 @@ import com.breadhardit.travelagencykata.application.command.command.CreateCustom
 import com.breadhardit.travelagencykata.application.command.query.GetCustomerQuery;
 import com.breadhardit.travelagencykata.application.port.CustomersRepository;
 import com.breadhardit.travelagencykata.domain.Customer;
+import com.breadhardit.travelagencykata.infrastructure.adapter.DatabaseAdapter;
 import com.breadhardit.travelagencykata.infrastructure.rest.dto.GetCustomerDTO;
 import com.breadhardit.travelagencykata.infrastructure.rest.dto.PutCustomerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomersController {
 
+    @Qualifier("databaseAdapter")
     final CustomersRepository customersRepository;
 
     @PutMapping("/customers")
