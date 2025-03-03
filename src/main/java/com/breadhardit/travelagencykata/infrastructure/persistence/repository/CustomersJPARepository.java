@@ -5,9 +5,10 @@ import com.breadhardit.travelagencykata.infrastructure.persistence.entity.Custom
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CustomersJPARepository extends JpaRepository<CustomerEntity,String> {
-    Customer getCustomerEntityById(String id);
 
-    Customer getCustomerEntityByPassportNumber(String passportNumber);
+    Optional<CustomerEntity> getCustomerEntityByPassportNumber(String passportNumber);
 }

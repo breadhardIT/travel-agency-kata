@@ -20,6 +20,7 @@ public class DatabaseAdapter implements CustomersRepository {
     }
     @Override
     public void saveCustomer(Customer customer) {
+        System.out.println("Guardando cliente con passportNumber: " + customer.getPassportNumber());
         CustomerEntity customerEntity = CustomerEntity.builder()
                 .id(customer.getId())
                 .name(customer.getName())
@@ -34,13 +35,33 @@ public class DatabaseAdapter implements CustomersRepository {
 
     @Override
     public Optional<Customer> getCustomerById(String id) {
-        Customer customer = customersJPARepository.getCustomerEntityById(id);
+        Optional<CustomerEntity> customerEntity = customersJPARepository.findById(id);
+        Customer customer= null;
+        if(customerEntity.isPresent()){
+            customer = buildCustomerFromCustomerEntity(customerEntity.get());
+        }
         return customer == null ? Optional.empty() : Optional.of(customer);
     }
 
     @Override
     public Optional<Customer> getCustomerByPassport(String id) {
-        Customer customer = customersJPARepository.getCustomerEntityByPassportNumber(id);
+        Optional<CustomerEntity> customerEntity = customersJPARepository.getCustomerEntityByPassportNumber(id);
+        System.out.println("Resultado de búsqueda: " + customerEntity);
+        Customer customer= null;
+        if(customerEntity.isPresent()){
+            customer = buildCustomerFromCustomerEntity(customerEntity.get());
+        }
         return customer == null ? Optional.empty() : Optional.of(customer);
+    }
+
+    private Customer buildCustomerFromCustomerEntity(CustomerEntity customerEntity){
+        return Customer.builder()
+                .id(customerEntity.getId())
+                .name(customerEntity.getName())
+                .surnames(customerEntity.getSurnames())
+                .birthDate(customerEntity.getBirthDate())
+                .enrollmentDate(customerEntity.getEnrollmentDate())
+                .active(customerEntity.getActive())
+                .build();
     }
 }
