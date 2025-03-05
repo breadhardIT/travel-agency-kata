@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
-@Scope("singleton")
 public class CustomersInMemoryRepository implements CustomersRepository {
     private final ConcurrentHashMap<String,Customer> customersById = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String,Customer> customersByPassport = new ConcurrentHashMap<>();
