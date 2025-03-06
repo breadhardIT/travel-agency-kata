@@ -21,7 +21,7 @@ public class GetCustomerQuery {
             return customersRepository.getCustomerById(id);
         }
         if (!StringUtils.hasText(id)) {
-            return customersRepository.getCustomerByPassport(id);
+            return customersRepository.getCustomerByPassport(passport); //@TODO antes el método getCustomerByPassport() recibia id en vez de passport lo que hacía que la busqueda por pasaporte nunca devolviera nada.
         }
         return Optional.empty();
     }

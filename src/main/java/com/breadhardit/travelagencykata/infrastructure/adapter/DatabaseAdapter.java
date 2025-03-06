@@ -20,7 +20,6 @@ public class DatabaseAdapter implements CustomersRepository {
     }
     @Override
     public void saveCustomer(Customer customer) {
-        System.out.println("Guardando cliente con passportNumber: " + customer.getPassportNumber());
         CustomerEntity customerEntity = CustomerEntity.builder()
                 .id(customer.getId())
                 .name(customer.getName())
@@ -36,6 +35,7 @@ public class DatabaseAdapter implements CustomersRepository {
     @Override
     public Optional<Customer> getCustomerById(String id) {
         Optional<CustomerEntity> customerEntity = customersJPARepository.findById(id);
+        System.out.println("Resultado de búsqueda por id: " + customerEntity);
         Customer customer= null;
         if(customerEntity.isPresent()){
             customer = buildCustomerFromCustomerEntity(customerEntity.get());
@@ -45,8 +45,8 @@ public class DatabaseAdapter implements CustomersRepository {
 
     @Override
     public Optional<Customer> getCustomerByPassport(String id) {
-        Optional<CustomerEntity> customerEntity = customersJPARepository.getCustomerEntityByPassportNumber(id);
-        System.out.println("Resultado de búsqueda: " + customerEntity);
+        Optional<CustomerEntity> customerEntity = customersJPARepository.findByPassportNumber(id) ;
+        System.out.println("Resultado de búsqueda por pasaporte: " + customerEntity);
         Customer customer= null;
         if(customerEntity.isPresent()){
             customer = buildCustomerFromCustomerEntity(customerEntity.get());
