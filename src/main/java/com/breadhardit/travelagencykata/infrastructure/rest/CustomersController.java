@@ -4,7 +4,6 @@ import com.breadhardit.travelagencykata.application.command.command.CreateCustom
 import com.breadhardit.travelagencykata.application.command.query.GetCustomerQuery;
 import com.breadhardit.travelagencykata.application.port.CustomersRepository;
 import com.breadhardit.travelagencykata.domain.Customer;
-import com.breadhardit.travelagencykata.infrastructure.adapter.DatabaseAdapter;
 import com.breadhardit.travelagencykata.infrastructure.rest.dto.GetCustomerDTO;
 import com.breadhardit.travelagencykata.infrastructure.rest.dto.PutCustomerDTO;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.breadhardit.travelagencykata.infrastructure.adapter;
+package com.breadhardit.travelagencykata.infrastructure.persistence.repository.adapter;
 
 import com.breadhardit.travelagencykata.application.port.CustomersRepository;
 import com.breadhardit.travelagencykata.domain.Customer;
@@ -35,7 +35,6 @@ public class DatabaseAdapter implements CustomersRepository {
     @Override
     public Optional<Customer> getCustomerById(String id) {
         Optional<CustomerEntity> customerEntity = customersJPARepository.findById(id);
-        System.out.println("Resultado de búsqueda por id: " + customerEntity);
         Customer customer= null;
         if(customerEntity.isPresent()){
             customer = buildCustomerFromCustomerEntity(customerEntity.get());
@@ -46,7 +45,6 @@ public class DatabaseAdapter implements CustomersRepository {
     @Override
     public Optional<Customer> getCustomerByPassport(String id) {
         Optional<CustomerEntity> customerEntity = customersJPARepository.findByPassportNumber(id) ;
-        System.out.println("Resultado de búsqueda por pasaporte: " + customerEntity);
         Customer customer= null;
         if(customerEntity.isPresent()){
             customer = buildCustomerFromCustomerEntity(customerEntity.get());
