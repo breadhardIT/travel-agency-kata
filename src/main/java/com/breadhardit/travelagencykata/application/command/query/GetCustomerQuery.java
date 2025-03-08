@@ -21,7 +21,7 @@ public class GetCustomerQuery {
             return customersRepository.getCustomerById(id);
         }
         if (!StringUtils.hasText(id)) {
-            return customersRepository.getCustomerByPassport(id);
+            return customersRepository.getCustomerByPassport(passport);
         }
         return Optional.empty();
     }
