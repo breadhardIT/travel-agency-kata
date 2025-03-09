@@ -4,8 +4,6 @@ import com.breadhardit.travelagencykata.domain.Customer;
 import com.breadhardit.travelagencykata.infrastructure.persistence.entity.CustomerEntity;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
 @Component
 public class CustomerToJpaEntityMapperImpl implements CustomerToJpaEntityMapper {
     @Override
