@@ -73,7 +73,7 @@ La interfaz CustomersJPAPRepository es la que interactúa con la base de datos.
 
 ## Y por fin, descripción de la tarea
 
-Como se podrá comprobar al observar las clases, el Port [CustomersRepository](src/main/java/com/breadhardit/travelagencykata/infrastructure/persistence/entity/CustomerEntity.java) 
+Como se podrá comprobar al observar las clases, el Port [CustomersRepository](src\main\java\com\breadhardit\travelagencykata\application\port\CustomersRepository.java) 
 no encaja con la interfaz [CustomersJPARepository](src/main/java/com/breadhardit/travelagencykata/infrastructure/persistence/repository/CustomersJPARepository.java) 
 así que para que encaje, tendremos que aplicar un patrón de diseño... pero, cúal?
 
@@ -123,7 +123,3 @@ sobre el tema, me puedes enviar un correo, y te lo explico.
 - Crea una nueva rama: ```git checkout -b feature/add-jpa-persistence```
 - Realiza los commits y push necesários
 - Crea una Pull Request en GitHub. [Aquí tienes un tutorial](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
-
-
-
-

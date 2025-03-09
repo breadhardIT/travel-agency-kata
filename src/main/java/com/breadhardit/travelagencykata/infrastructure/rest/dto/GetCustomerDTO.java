@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Value
 @Builder
 public class GetCustomerDTO {
@@ -11,5 +13,6 @@ public class GetCustomerDTO {
     String name;
     String surnames;
     LocalDate birthDate;
+    LocalDate enrollmentDate;
     String passportNumber;
 }
