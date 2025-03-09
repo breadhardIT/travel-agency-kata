@@ -49,8 +49,8 @@ class TravelAgencyKataApplicationTests {
         Assertions.assertTrue(getCustomerResponse.hasBody());
         // Call get by passport method should return 200 with body
         var getCustomerByPassportResponse = customersController.getCustomers("123");
-        Assertions.assertEquals(HttpStatus.OK, getCustomerResponse.getStatusCode());
-        Assertions.assertTrue(getCustomerResponse.hasBody());
+        Assertions.assertEquals(HttpStatus.OK, getCustomerByPassportResponse.getStatusCode());
+        Assertions.assertTrue(getCustomerByPassportResponse.hasBody());
     }
     @Test
     void givenNonExistingUserThen404() {
