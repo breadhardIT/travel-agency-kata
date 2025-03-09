@@ -7,12 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
-@Primary // Para darle prioridad sobre la implementación InMemory
+@Primary
 @RequiredArgsConstructor
-public class JpaCustomersRepository implements CustomersRepository {
+public class CustomersJPARepositoryToCustomersRepositoryAdapter implements CustomersRepository {
 
     private final CustomersJPARepository jpaRepository;
 
@@ -29,15 +30,27 @@ public class JpaCustomersRepository implements CustomersRepository {
     }
 
     @Override
-    public Optional<Customer> getCustomerByPassport(String passport) {
-        return Optional.empty();
+    public Optional<Customer> getCustomerByPassport(String passportNumber) {
+        return jpaRepository.findByPassportNumber(passportNumber)
+                .map(this::mapToDomain);
     }
 
     private CustomerEntity mapToEntity(Customer customer) {
+
+        LocalDate enrollmentDate = LocalDate.now();
+
+        Boolean active = customer.getActive() != null
+                ? customer.getActive()
+                : Boolean.FALSE;
+
         return CustomerEntity.builder()
                 .id(customer.getId())
                 .name(customer.getName())
                 .surnames(customer.getSurnames())
+                .birthDate(customer.getBirthDate())
+                .passportNumber(customer.getPassportNumber())
+                .enrollmentDate(enrollmentDate)
+                .active(active)
                 .build();
     }
 
@@ -46,6 +59,10 @@ public class JpaCustomersRepository implements CustomersRepository {
                 .id(entity.getId())
                 .name(entity.getName())
                 .surnames(entity.getSurnames())
+                .birthDate(entity.getBirthDate())
+                .passportNumber(entity.getPassportNumber())
+                .enrollmentDate(entity.getEnrollmentDate())
+                .active(entity.getActive())
                 .build();
     }
 }
