@@ -12,5 +12,6 @@ public class PutCustomerDTO {
     String surnames;
     LocalDate birthDate;
     String passportNumber;
+    LocalDate enrollmentDate;
     Boolean active;
 }
