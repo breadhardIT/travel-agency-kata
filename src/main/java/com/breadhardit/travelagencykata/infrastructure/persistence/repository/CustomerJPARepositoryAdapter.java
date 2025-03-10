@@ -4,8 +4,6 @@ import com.breadhardit.travelagencykata.application.port.CustomersRepository;
 import com.breadhardit.travelagencykata.domain.Customer;
 import com.breadhardit.travelagencykata.infrastructure.persistence.entity.CustomerEntity;
 import com.breadhardit.travelagencykata.infrastructure.persistence.entity.CustomerMapper;
-import com.breadhardit.travelagencykata.infrastructure.rest.dto.PutCustomerDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
