@@ -5,11 +5,15 @@ import com.breadhardit.travelagencykata.application.port.CustomersRepository;
 import com.breadhardit.travelagencykata.infrastructure.persistence.entity.CustomerEntity;
 import com.breadhardit.travelagencykata.infrastructure.persistence.repository.CustomersJPARepository;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
 @Primary
+@Scope("singleton")
 public class CustomerRepositoryAdapter implements CustomersRepository {
 
     private final CustomersJPARepository jpaRepository;
@@ -20,8 +24,8 @@ public class CustomerRepositoryAdapter implements CustomersRepository {
 
     @Override
     public void saveCustomer(Customer customer) {
-        CustomerEntity entity = toEntity(customer);
-        jpaRepository.save(entity);
+        CustomerEntity customerEntity = toEntity(customer);
+        jpaRepository.saveAndFlush(customerEntity);
     }
 
     @Override
@@ -34,17 +38,18 @@ public class CustomerRepositoryAdapter implements CustomersRepository {
         return jpaRepository.findByPassportNumber(passport).map(this::toDomain);
     }
 
-    // Conversión de Customer (dominio) a CustomerEntity (persistencia)
     private CustomerEntity toEntity(Customer customer) {
-        CustomerEntity entity = new CustomerEntity();
-        entity.setId(customer.getId());
-        entity.setName(customer.getName());
-        entity.setPassportNumber(customer.getPassportNumber());
-        // Mapear otros campos si es necesario
-        return entity;
+        return CustomerEntity.builder()
+                .id(customer.getId())
+                .name(customer.getName())
+                .surnames(customer.getSurnames())
+                .birthDate(customer.getBirthDate())
+                .passportNumber(customer.getPassportNumber())
+                .enrollmentDate(LocalDate.now())
+                .active(true)
+                .build();
     }
 
-    // Conversión de CustomerEntity a Customer (dominio)
     private Customer toDomain(CustomerEntity entity) {
         return Customer.builder()
                 .id(entity.getId())
