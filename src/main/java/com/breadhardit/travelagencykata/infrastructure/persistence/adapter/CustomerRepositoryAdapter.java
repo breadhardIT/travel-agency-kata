@@ -1,8 +1,9 @@
-package com.breadhardit.travelagencykata.infrastructure.persistence.repository;
+package com.breadhardit.travelagencykata.infrastructure.persistence.adapter;
 
 import com.breadhardit.travelagencykata.application.port.CustomersRepository;
 import com.breadhardit.travelagencykata.domain.Customer;
 import com.breadhardit.travelagencykata.infrastructure.persistence.entity.CustomerEntity;
+import com.breadhardit.travelagencykata.infrastructure.persistence.repository.CustomersJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
@@ -49,9 +50,8 @@ public class CustomerRepositoryAdapter implements CustomersRepository {
     }
 
     @Override
-    public Optional<Customer> getCustomerByPassport(String id) {
-        CustomerEntity customerEntity = customersJPARepository.findAll().stream()
-                .filter(c -> c.getPassportNumber().equals(id)).findFirst().orElse(null);
+    public Optional<Customer> getCustomerByPassport(String passport) {
+        CustomerEntity customerEntity = customersJPARepository.findByPassportNumber(passport).orElse(null);
         return customerEntity == null ? Optional.empty()
                 : Optional.of(Customer.builder()
                 .id(customerEntity.getId())
