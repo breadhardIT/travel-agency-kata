@@ -1,6 +1,5 @@
 package com.breadhardit.travelagencykata;
 
-import com.breadhardit.travelagencykata.domain.Customer;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -8,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class BehavioralPatternExercices {
@@ -20,7 +18,7 @@ public class BehavioralPatternExercices {
      */
     @Data
     public static class Travel {
-        public static final List<String> SCHENGEN_COUNTRIES = List.of("Spain","France","Iceland","Italy","Portugal");
+        public static final List<String> SCHENGEN_COUNTRIES = List.of("Spain", "France", "Iceland", "Italy", "Portugal");
         String id;
         String name;
         String origin;
@@ -28,30 +26,36 @@ public class BehavioralPatternExercices {
         Boolean sameCountryTravel = Boolean.FALSE;
         Boolean schengenSpaceTravel = Boolean.FALSE;
         Boolean visaRequiredTravel = Boolean.FALSE;
-        public Travel(String id,String name,String origin,String destination) {
+
+        public Travel(String id, String name, String origin, String destination) {
             if (origin.equals(destination)) this.sameCountryTravel = Boolean.TRUE;
-            else if (SCHENGEN_COUNTRIES.contains(origin) && SCHENGEN_COUNTRIES.contains(destination)) this.schengenSpaceTravel = Boolean.TRUE;
+            else if (SCHENGEN_COUNTRIES.contains(origin) && SCHENGEN_COUNTRIES.contains(destination))
+                this.schengenSpaceTravel = Boolean.TRUE;
             else this.visaRequiredTravel = Boolean.TRUE;
         }
     }
+
     public static void scanVisa() {
         log.info("Applying visa...");
     }
+
     public static void scanDNI() {
         log.info("Applying DNI...");
     }
+
     public static void scanPassport() {
         log.info("Applying Passport");
     }
+
     @Test
     // When customer buy a new Travel we have to scan the proper documentation
     public void travelAgency() {
         List<Travel> travels = List.of(
-                new Travel(UUID.randomUUID().toString(),"PYRAMIDS TOUR","Spain","EGYPT"),
-                new Travel(UUID.randomUUID().toString(),"LISBOA TOUR","Spain","Portugal"),
-                new Travel(UUID.randomUUID().toString(),"LISBOA TOUR","Portugal","Portugal")
+                new Travel(UUID.randomUUID().toString(), "PYRAMIDS TOUR", "Spain", "EGYPT"),
+                new Travel(UUID.randomUUID().toString(), "LISBOA TOUR", "Spain", "Portugal"),
+                new Travel(UUID.randomUUID().toString(), "LISBOA TOUR", "Portugal", "Portugal")
         );
-        for (Travel travel: travels) {
+        for (Travel travel : travels) {
             if (travel.visaRequiredTravel) scanVisa();
             else if (travel.schengenSpaceTravel) scanPassport();
             else if (travel.sameCountryTravel) scanDNI();
@@ -73,11 +77,12 @@ public class BehavioralPatternExercices {
         @Builder.Default
         Boolean greetingDone = Boolean.FALSE;
     }
-    public static class EmployeesRepository{
-        private static final ConcurrentHashMap<String,Employee> EMPLOYEES = new ConcurrentHashMap<>();
+    public static class EmployeesRepository {
+        private static final ConcurrentHashMap<String, Employee> EMPLOYEES = new ConcurrentHashMap<>();
         public void addEmployee(Employee employee) {
-            EMPLOYEES.put(employee.getId(),employee);
+            EMPLOYEES.put(employee.getId(), employee);
         }
+
         public List<Employee> getUnnotifiedEmployees() {
             return EMPLOYEES.values().stream().filter(e -> !e.greetingDone).toList();
         }
@@ -86,12 +91,16 @@ public class BehavioralPatternExercices {
     @AllArgsConstructor
     public static class GreetingsNotificator {
         EmployeesRepository employeesRepository;
+
         @SneakyThrows
         public void applyNotifications() {
             while (true) {
                 log.info("Aplying notifications");
                 List<Employee> employeesToNotify = employeesRepository.getUnnotifiedEmployees();
-                employeesToNotify.forEach(e -> {log.info("Notifying {}", e);e.setGreetingDone(Boolean.TRUE);});
+                employeesToNotify.forEach(e -> {
+                    log.info("Notifying {}", e);
+                    e.setGreetingDone(Boolean.TRUE);
+                });
                 Thread.sleep(100);
             }
         }

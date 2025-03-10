@@ -28,7 +28,7 @@ base de datos se guardan. Todo ello se realiza separando el código en 3 capas:
 
 - Domain: contiene los objetos de valor del negocio, y la lógica más interna.
 - Application: desarrolla los casos de uso. Sería el equivalente a la capa de servicing del modelo de 3 capas.
-- Infrastructure: implemente la infraestructura físicas (bases de datos, controladores rest, consumidores de eventos...)
+- Infrastructure: implementa la infraestructura física (bases de datos, controladores rest, consumidores de eventos...)
 
 Para profundizar más, info [aquí](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/hexagonal-architecture.html)
 
