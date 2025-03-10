@@ -26,8 +26,8 @@ public class CustomersInMemoryRepository implements CustomersRepository {
     }
 
     @Override
-    public Optional<Customer> getCustomerByPassport(String id) {
-        Customer customer = customersByPassport.get(id);
+    public Optional<Customer> getCustomerByPassport(String passport) {
+        Customer customer = customersByPassport.get(passport);
         return customer == null ? Optional.empty() : Optional.of(customer);
     }
 }
