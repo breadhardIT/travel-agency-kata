@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
-@Scope("singleton")
 public class CustomersInMemoryRepository implements CustomersRepository {
     private final ConcurrentHashMap<String,Customer> customersById = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String,Customer> customersByPassport = new ConcurrentHashMap<>();
@@ -26,8 +24,8 @@ public class CustomersInMemoryRepository implements CustomersRepository {
     }
 
     @Override
-    public Optional<Customer> getCustomerByPassport(String id) {
-        Customer customer = customersByPassport.get(id);
+    public Optional<Customer> getCustomerByPassport(String passportId) {
+        Customer customer = customersByPassport.get(passportId);
         return customer == null ? Optional.empty() : Optional.of(customer);
     }
 }
