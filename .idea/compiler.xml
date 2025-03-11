@@ -12,11 +12,21 @@
         </processorPath>
         <module name="travel-agency-kata" />
       </profile>
+      <profile name="Annotation profile for travel-agency-kata-Sandra-Pelaez-delaOsa" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+        </processorPath>
+        <module name="travel-agency-kata-Sandra-Pelaez-delaOsa" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="travel-agency-kata" options="-parameters" />
+      <module name="travel-agency-kata-Sandra-Pelaez-delaOsa" options="-parameters" />
     </option>
   </component>
 </project>
