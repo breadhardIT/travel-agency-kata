@@ -5,7 +5,7 @@ Este patrón permite que dos interfaces incompatibles trabajen juntas. En este c
 `CustomersRepository` sea compatible con `CustomersJPARepository`, por lo que se ha desarrollado una clase
 `CustomersRepositoryAdapter` que implementa la interfaz `CustomersRepository` y se comunica con la clase
 `CustomersJPARepository`. Al añadirle la anotación `@Primary` a la clase `CustomersRepositoryAdapter`, Spring Boot
-inyectará esta clase en lugar de `CustomersInMemoryRepository` cuando se necesite un bean de tipo `CustomersRepository`.
+inyectará esta clase en lugar de `CustomersInMemoryRepository` cuando se necesite un `CustomersRepository`.
 
 De esta forma se consigue que la aplicación funcione con la base de datos sin necesidad de modificar las capas de
 aplicación y dominio.
@@ -25,3 +25,10 @@ con métodos innecesarios. Las interfaces del proyecto cumplen con este principi
 - **Principio de inversión de dependencias**: Se debe depender de abstracciones, no de implementaciones. Esto puede
 observarse en los comandos, que dependen de la interfaz `CustomersRepository` y no de sus implementaciones.
 
+No he encontrado código que incumpla SOLID.
+
+# PATRONES DE DISEÑO ENCONTRADOS
+
+- **Adapter**: Lo he utilizado para adaptar la interfaz `CustomersRepository` a `CustomersJPARepository`.
+- **Command**: Utilizado para encapsular las operaciones de la capa de aplicación en objetos ejecutables.
+- **Singleton**: En `CustomersInMemoryRepository` para garantizar que solo exista una instancia de la clase.
