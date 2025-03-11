@@ -19,12 +19,15 @@ import java.util.Objects;
 @Slf4j
 @DirtiesContext
 class TravelAgencyKataApplicationTests {
+    
     @Autowired
     CustomersController customersController;
+
     @BeforeEach
     public void beforeEach() {
 
     }
+
     @Test
     void contextLoads() {
         log.info("Context Loaded");
@@ -52,6 +55,7 @@ class TravelAgencyKataApplicationTests {
         Assertions.assertEquals(HttpStatus.OK, getCustomerResponse.getStatusCode());
         Assertions.assertTrue(getCustomerResponse.hasBody());
     }
+
     @Test
     void givenNonExistingUserThen404() {
         var getCustomerResponse = customersController.getCustomer("POTATO");

@@ -16,17 +16,23 @@ public class StructuralPatternExercices {
      * Te number of calories to return in a query is the summary of the calories of
      * the elements queried
      */
+
+    public interface ObjectWithCalories {
+        Long getCalories();
+    }
+
     @Value
-    public static class Food {
+    public static class Food implements ObjectWithCalories{
         String name;
         Long caloresPer100g;
         Long weight;
-        Long getCalories() {
+        public Long getCalories() {
             return caloresPer100g * weight;
         }
     }
+
     @Value
-    public static class Dish {
+    public static class Dish implements ObjectWithCalories{
         String name;
         List<Food> foodList;
         public void addIngredient(Food food) {
@@ -37,14 +43,21 @@ public class StructuralPatternExercices {
             return this.foodList.stream().collect(Collectors.summarizingLong(Food::getCalories)).getSum();
         }
     }
-    public Long getCalores() {
-        /* TODO
-         * Refactor classes and codify a method which returns the sum of calories of a Menu.
-         * A menu can is a list of Dishes, or individuals Food, see following example
-         * Use the proper structural pattern
-         */
-        return 0L;
+
+    public static class Menu implements ObjectWithCalories{
+        List<ObjectWithCalories> meals;
+        Long totalCalories = 0L;
+        public Menu(List<ObjectWithCalories> meals) {
+            this.meals = meals;
+        }
+        public Long getCalories(){
+            for (int i = 0; i < meals.size(); i++) {
+                totalCalories += meals.get(i).getCalories();
+            }
+            return totalCalories;
+        }
     }
+
     @Test
     public void testCalories() {
         Food potato = new Food("POTATO", 80L, 300L);
@@ -57,7 +70,8 @@ public class StructuralPatternExercices {
         Food beer = new Food("BEER", 80L, 330L);
         Dish completeBuger = new Dish("COMPLETE BURGER", List.of(potato, bread, burger));
         Dish greenSalad = new Dish("GREEN SALAD", List.of(lettuce, tomato));
-        List<Object> menu = List.of(greenSalad, completeBuger, ketchup, apple);
-        log.info("Calories: {}", getCalores());
+        Menu menu = new Menu(List.of(greenSalad, completeBuger, ketchup, apple));
+
+        log.info(menu.getCalories().toString());
     }
 }

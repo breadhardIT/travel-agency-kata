@@ -2,6 +2,8 @@ package com.breadhardit.travelagencykata.infrastructure.persistence.repository;
 
 import com.breadhardit.travelagencykata.domain.Customer;
 import com.breadhardit.travelagencykata.application.port.CustomersRepository;
+
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
