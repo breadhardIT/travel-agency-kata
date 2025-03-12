@@ -18,6 +18,7 @@ public class CreateCustomerCommand {
     LocalDate birthDate;
     String passportNumber;
     CustomersRepository customersRepository;
+
     @SneakyThrows
     public String handle() {
         Customer customer = Customer.builder()
