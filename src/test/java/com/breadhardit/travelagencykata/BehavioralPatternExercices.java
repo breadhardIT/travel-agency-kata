@@ -20,20 +20,69 @@ public class BehavioralPatternExercices {
      */
     @Data
     public static class Travel {
-        public static final List<String> SCHENGEN_COUNTRIES = List.of("Spain","France","Iceland","Italy","Portugal");
+
         String id;
         String name;
         String origin;
         String destination;
-        Boolean sameCountryTravel = Boolean.FALSE;
-        Boolean schengenSpaceTravel = Boolean.FALSE;
-        Boolean visaRequiredTravel = Boolean.FALSE;
+        Process process;
+
         public Travel(String id,String name,String origin,String destination) {
-            if (origin.equals(destination)) this.sameCountryTravel = Boolean.TRUE;
-            else if (SCHENGEN_COUNTRIES.contains(origin) && SCHENGEN_COUNTRIES.contains(destination)) this.schengenSpaceTravel = Boolean.TRUE;
-            else this.visaRequiredTravel = Boolean.TRUE;
+           this.id=id;
+           this.name= name;
+           this.destination=destination;
+           this.origin=origin;
+           this.process= ProcessFactory.getProcessonly(origin,destination);
+        }
+
+        public Process getProcess() {
+            return this.process;
+        }
+
+        public void setProcess(Process process) {
+            this.process = process;
         }
     }
+
+    public interface Process{
+        public void Documentationprocess();
+    }
+
+    public static class Visa implements Process{
+
+        @Override
+        public void Documentationprocess() {
+            System.out.println("Visa process");
+        }
+    }
+    public static class Passport implements Process{
+
+        @Override
+        public void Documentationprocess() {
+            System.out.println("Passport process");
+        }
+    }
+
+    public static class DNI implements Process{
+
+        @Override
+        public void Documentationprocess() {
+            System.out.println("DNI process");
+        }
+    }
+
+    public static class ProcessFactory{
+
+        public static Process getProcessonly(String origen, String destino){
+            List<String> SCHENGEN_COUNTRIES = List.of("Spain","France","Iceland","Italy","Portugal");
+            if (origen.equals(destino)) return new DNI();
+            else if (SCHENGEN_COUNTRIES.contains(origen) && SCHENGEN_COUNTRIES.contains(destino)) return new Passport();
+            else return new Visa();
+
+        }
+
+    }
+
     public static void scanVisa() {
         log.info("Applying visa...");
     }
@@ -52,9 +101,7 @@ public class BehavioralPatternExercices {
                 new Travel(UUID.randomUUID().toString(),"LISBOA TOUR","Portugal","Portugal")
         );
         for (Travel travel: travels) {
-            if (travel.visaRequiredTravel) scanVisa();
-            else if (travel.schengenSpaceTravel) scanPassport();
-            else if (travel.sameCountryTravel) scanDNI();
+            travel.getProcess();
         }
     }
     // Refactor code using the proper structural pattern
@@ -77,6 +124,7 @@ public class BehavioralPatternExercices {
         private static final ConcurrentHashMap<String,Employee> EMPLOYEES = new ConcurrentHashMap<>();
         public void addEmployee(Employee employee) {
             EMPLOYEES.put(employee.getId(),employee);
+
         }
         public List<Employee> getUnnotifiedEmployees() {
             return EMPLOYEES.values().stream().filter(e -> !e.greetingDone).toList();
@@ -96,6 +144,27 @@ public class BehavioralPatternExercices {
             }
         }
     }
+    public interface UserService{
+        public void CreateUser();
+        public void NotificationUSer();
+    }
+
+    public class UserServiceimp implements UserService {
+
+        private EmployeesRepository employeesRepository;
+
+        @Override
+        public void CreateUser() {
+
+
+        }
+
+        @Override
+        public void NotificationUSer() {
+
+        }
+    }
+
     @Test
     @SneakyThrows
     public void companyTest() {
