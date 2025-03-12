@@ -17,33 +17,37 @@ public class StructuralPatternExercices {
      * the elements queried
      */
     @Value
-    public static class Food {
+    public static class Food implements Calories{
         String name;
         Long caloresPer100g;
         Long weight;
-        Long getCalories() {
+        public Long getCalories() {
             return caloresPer100g * weight;
         }
     }
+
+    public interface Calories {
+        Long getCalories();
+    }
     @Value
-    public static class Dish {
+    public static class Dish implements Calories{
         String name;
-        List<Food> foodList;
+        List<Calories> foodList;
         public void addIngredient(Food food) {
             this.foodList.add(food);
         }
         // Returns the calories of the dish as the sum of calories of each Food
         public Long getCalories() {
-            return this.foodList.stream().collect(Collectors.summarizingLong(Food::getCalories)).getSum();
+            return this.foodList.stream().collect(Collectors.summarizingLong(Calories::getCalories)).getSum();
         }
     }
-    public Long getCalores() {
-        /* TODO
-         * Refactor classes and codify a method which returns the sum of calories of a Menu.
-         * A menu can is a list of Dishes, or individuals Food, see following example
-         * Use the proper structural pattern
-         */
-        return 0L;
+    public Long getCalores(List<Calories> menu) {
+        Long totalCalories = 0L;
+        for (int i = 0; i < menu.size(); i++) {
+            Calories item = menu.get(i);
+            totalCalories += item.getCalories();
+        }
+        return totalCalories;
     }
     @Test
     public void testCalories() {
@@ -57,7 +61,7 @@ public class StructuralPatternExercices {
         Food beer = new Food("BEER", 80L, 330L);
         Dish completeBuger = new Dish("COMPLETE BURGER", List.of(potato, bread, burger));
         Dish greenSalad = new Dish("GREEN SALAD", List.of(lettuce, tomato));
-        List<Object> menu = List.of(greenSalad, completeBuger, ketchup, apple);
-        log.info("Calories: {}", getCalores());
+        List<Calories> menu = List.of(greenSalad, completeBuger, ketchup, apple);
+        log.info("Calories: {}", getCalores(menu));
     }
 }

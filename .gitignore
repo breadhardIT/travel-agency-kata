@@ -1,2 +1,4 @@
 *.plantuml
 target/
+/.idea/codeStyles/
+
