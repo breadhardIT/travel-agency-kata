@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,6 +19,7 @@ import java.util.Objects;
 @SpringBootTest
 @Slf4j
 @DirtiesContext
+@ActiveProfiles("test")
 class TravelAgencyKataApplicationTests {
     @Autowired
     CustomersController customersController;

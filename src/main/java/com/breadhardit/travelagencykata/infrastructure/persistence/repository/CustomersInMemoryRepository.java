@@ -2,6 +2,8 @@ package com.breadhardit.travelagencykata.infrastructure.persistence.repository;
 
 import com.breadhardit.travelagencykata.domain.Customer;
 import com.breadhardit.travelagencykata.application.port.CustomersRepository;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 @Scope("singleton")
+@Profile("!test")
 public class CustomersInMemoryRepository implements CustomersRepository {
     private final ConcurrentHashMap<String,Customer> customersById = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String,Customer> customersByPassport = new ConcurrentHashMap<>();
@@ -22,6 +25,7 @@ public class CustomersInMemoryRepository implements CustomersRepository {
     @Override
     public Optional<Customer> getCustomerById(String id) {
         Customer customer = customersById.get(id);
+
         return customer == null ? Optional.empty() : Optional.of(customer);
     }
 
