@@ -17,3 +17,12 @@ La aplicación no ve la interfaz mucho más grande de JpaRepository, que queda o
 
 **- Dependency inversion**: entidades dependen de abstracciones. es decir no depender de implementaciones concretas.
 Los casos de uso dependen de la abstracción CustomersRepository, no de JPA. La infraestructura depende de la aplicación, y no al revés. La inyección es por constructor, como en CustomerRepositoryAdapter(CustomersJPARepository jpaRepository).
+
+
+**PATRONES DE DISEÑO**
+En el repositorio se pueden observar varios patrones de diseño,
+
+- Arquitectura hexagonal (puertos y adaptadores): es el patrón arquitectónico del proyecto. De esta manera se aislan las distintas funcionalidades, de manera que sea más matenible en el futuro.
+- Adapter: CustomerRepositoryAdapter adapta la interfaz del puerto (saveCustomer, getCustomerById...) a la de Spring Data (save, findById...). Este es el patrón que se ha implementado para el taller, ya que había que juntar dos interfaces que no eran compatibles inicialmente.
+- Builder: Lombok @Builder en Customer, CustomerEntity, los DTO y los comandos, por ejemplo Customer.builder().id(...).build(). Tambien existe una propia clase _CustomerBuilder_ que se encarga de crear a las entidades de tipo _Customer_ sin que las clases que necesiten instanciarlos sepan los detalles de implementación.
+- Singleton: CustomersInMemoryRepository lleva @Scope("singleton"), y los beans de Spring son singletons por defecto. Esto significa que solo puede haber una instancia de la clase a la vez.
