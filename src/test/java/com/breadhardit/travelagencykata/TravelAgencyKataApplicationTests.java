@@ -1,62 +1,108 @@
 package com.breadhardit.travelagencykata;
 
-import com.breadhardit.travelagencykata.infrastructure.rest.CustomersController;
-import com.breadhardit.travelagencykata.infrastructure.rest.dto.PutCustomerDTO;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import com.breadhardit.travelagencykata.infrastructure.persistence.entity.CustomerEntity;
+import com.breadhardit.travelagencykata.infrastructure.persistence.repository.CustomersJPARepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.net.URI;
 import java.time.LocalDate;
-import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@Slf4j
+@AutoConfigureMockMvc
 @DirtiesContext
 class TravelAgencyKataApplicationTests {
     @Autowired
-    CustomersController customersController;
-    @BeforeEach
-    public void beforeEach() {
+    private MockMvc mvc;
 
-    }
+    @Autowired
+    private CustomersJPARepository repository;
+
     @Test
     void contextLoads() {
-        log.info("Context Loaded");
     }
 
     @Test
-    void givenAUserWhenCreatedThenOK() {
-        // Creates a new customer using the controller method
-        var putCustomerResponse = customersController.putCustomer(
-                PutCustomerDTO.builder().name("Pepe").surnames("Perez").birthDate(LocalDate.now()).passportNumber("123").build()
-        );
-        // Assert the response is OK
-        Assertions.assertEquals(HttpStatus.CREATED, putCustomerResponse.getStatusCode());
-        // Assert response has location header
-        Assertions.assertTrue(putCustomerResponse.getHeaders().containsKey(HttpHeaders.LOCATION));
-        // Assert id exists in repository, first, obtaining the id from the location
-        String location = Objects.requireNonNull(putCustomerResponse.getHeaders().getLocation()).getPath();
-        String id = location.substring(location.lastIndexOf("/") + 1);
-        // Call get method
-        var getCustomerResponse = customersController.getCustomer(id);
-        Assertions.assertEquals(HttpStatus.OK, getCustomerResponse.getStatusCode());
-        Assertions.assertTrue(getCustomerResponse.hasBody());
-        // Call get by passport method should return 200 with body
-        var getCustomerByPassportResponse = customersController.getCustomers("123");
-        Assertions.assertEquals(HttpStatus.OK, getCustomerResponse.getStatusCode());
-        Assertions.assertTrue(getCustomerResponse.hasBody());
+    void savesAndFindsCustomerByIdAndPassport() throws Exception {
+        URI location = createCustomer("Pepe", "123");
+        String path = location.getPath();
+        String id = path.substring(path.lastIndexOf('/') + 1);
+
+        CustomerEntity saved = repository.findById(id).orElseThrow();
+        assertEquals("Pepe", saved.getName());
+        assertEquals("Perez", saved.getSurnames());
+        assertEquals(LocalDate.of(1997, 5, 12), saved.getBirthDate());
+        assertEquals("123", saved.getPassportNumber());
+        assertNotNull(saved.getEnrollmentDate());
+        assertEquals(Boolean.FALSE, saved.getActive());
+
+        mvc.perform(get(location))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value("Pepe"))
+                .andExpect(jsonPath("$.surnames").value("Perez"))
+                .andExpect(jsonPath("$.birthDate").value("1997-05-12"))
+                .andExpect(jsonPath("$.passportNumber").value("123"));
+
+        mvc.perform(get("/customers").param("passport-number", "123"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(id));
     }
+
     @Test
-    void givenNonExistingUserThen404() {
-        var getCustomerResponse = customersController.getCustomer("POTATO");
-        Assertions.assertEquals(HttpStatus.NO_CONTENT,getCustomerResponse.getStatusCode());
+    void returnsNoContentForMissingCustomer() throws Exception {
+        mvc.perform(get("/customers/POTATO"))
+                .andExpect(status().isNoContent());
+        mvc.perform(get("/customers").param("passport-number", "POTATO"))
+                .andExpect(status().isNoContent());
     }
 
+    @Test
+    void returnsLatestRegistrationWhenCustomersSharePassport() throws Exception {
+        URI first = createCustomer("Ana", "456");
+        createCustomer("Marta", "456");
 
+        mvc.perform(get(first))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Ana"));
+
+        mvc.perform(get("/customers").param("passport-number", "456"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].name").value("Marta"));
+    }
+
+    private URI createCustomer(String name, String passportNumber) throws Exception {
+        String location = mvc.perform(put("/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "%s",
+                                  "surnames": "Perez",
+                                  "birthDate": "1997-05-12",
+                                  "passportNumber": "%s"
+                                }
+                                """.formatted(name, passportNumber)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists(HttpHeaders.LOCATION))
+                .andReturn()
+                .getResponse()
+                .getHeader(HttpHeaders.LOCATION);
+        return URI.create(location);
+    }
 }

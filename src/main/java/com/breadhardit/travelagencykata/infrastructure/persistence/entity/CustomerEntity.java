@@ -4,29 +4,36 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "CUSTOMERS")
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class CustomerEntity {
     @Id
     @Column(name = "ID")
-    String id;
+    private String id;
     @Column(name = "NAME")
-    String name;
+    private String name;
     @Column(name = "SURNAMES")
-    String surnames;
+    private String surnames;
     @Column(name = "BIRTH_DATE")
-    LocalDate birthDate;
+    private LocalDate birthDate;
     @Column(name = "PASSPORT_NUMBER")
-    String passportNumber;
+    private String passportNumber;
     @Column(name = "ENROLLMENT_DATE")
-    LocalDate enrollmentDate;
+    private LocalDate enrollmentDate;
     @Column(name = "ACTIVE")
-    Boolean active;
+    private Boolean active;
+    @Column(name = "REGISTRATION_ORDER", insertable = false, updatable = false)
+    private Long registrationOrder;
 }
